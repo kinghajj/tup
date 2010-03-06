@@ -29,7 +29,6 @@ gcc *.o -o tup -lpthread -lsocket
 cd ..
 
 # Solaris needs a tup.config with these options for tup to self-host.
-echo CONFIG_TUP_NO_COLORS=y >>tup.config
 echo CONFIG_TUP_NO_MONITOR=y >>tup.config
 echo CONFIG_TUP_NO_READLINKAT=y >>tup.config
 echo CONFIG_TUP_NO_TOUCH=y >>tup.config
