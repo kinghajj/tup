@@ -1,7 +1,12 @@
+// This module is only really used by the monitor, so if we're not
+// compiling the monitor than we might as well skip this too.
+#ifndef TUP_NO_MONITOR
+
 #include "lock.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/file.h>
+#include <sys/fcntl.h>
 
 /* So...the tri-lock business. There are three locks. They lock one thing - the
  * database. It also lets the monitor ignore the file accesses while an update
@@ -119,3 +124,5 @@ int tup_tri_lock(void)
 {
 	return tri_lock;
 }
+
+#endif

@@ -18,6 +18,8 @@
  *                 not yet created on bar, repeat step 1 on bar.
  */
 
+#ifndef TUP_NO_MONITOR
+
 #define _ATFILE_SOURCE
 #include "monitor.h"
 #include <stdio.h>
@@ -934,3 +936,5 @@ static void sighandler(int sig)
 		exit(0);
 	}
 }
+
+#endif

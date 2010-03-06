@@ -118,7 +118,9 @@ int updater(int argc, char **argv, int phase)
 	}
 
 	if(do_scan) {
+#ifndef TUP_NO_MONITOR
 		if(monitor_get_pid() < 0) {
+#endif
 			struct timeval t1, t2;
 			tup_main_progress("Scanning filesystem...");
 			fflush(stdout);
@@ -129,6 +131,7 @@ int updater(int argc, char **argv, int phase)
 			printf("%.3fs\n",
 			       (double)(t2.tv_sec - t1.tv_sec) +
 			       (double)(t2.tv_usec - t1.tv_usec)/1e6);
+#ifndef TUP_NO_MONITOR
 		} else {
 			/* tup_scan would normally add the @-directory to the
 			 * entry tree, so if that doesn't run we add it here.
@@ -141,6 +144,7 @@ int updater(int argc, char **argv, int phase)
 				return -1;
 			tup_main_progress("No filesystem scan - monitor is running.\n");
 		}
+#endif
 	}
 	if(server_init() < 0)
 		return -1;
@@ -855,7 +859,9 @@ static int update(struct node *n, struct server *s)
 			.sa_flags = SA_RESETHAND | SA_RESTART,
 		};
 
+#ifndef TUP_NO_MONITOR
 		tup_lock_close();
+#endif
 		sigemptyset(&sa.sa_mask);
 		sigaction(SIGINT, &sa, NULL);
 		sigaction(SIGTERM, &sa, NULL);

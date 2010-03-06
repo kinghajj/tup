@@ -1,2 +1,7 @@
 include_rules
+
+ifeq (@(TUP_NO_TOUCH),y)
+CFLAGS_main.c = -DTUP_NO_TOUCH
+endif
+
 : foreach *.c |> !cc |> %B.o

@@ -53,6 +53,7 @@ tupid_t create_dir_file(tupid_t dt, const char *path)
 tupid_t update_symlink_fileat(tupid_t dt, int dfd, const char *file,
 			      time_t mtime, int force)
 {
+#ifndef TUP_NO_READLINKAT
 	int rc;
 	struct tup_entry *tent;
 	struct tup_entry *link_entry;
@@ -103,6 +104,9 @@ tupid_t update_symlink_fileat(tupid_t dt, int dfd, const char *file,
 		if(tup_db_set_mtime(tent, mtime) < 0)
 			return -1;
 	return tent->tnode.tupid;
+#else
+	return -1;
+#endif
 }
 
 tupid_t tup_file_mod(tupid_t dt, const char *file)

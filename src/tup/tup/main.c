@@ -59,7 +59,12 @@ int main(int argc, char **argv)
 		printf("tup %s\n", tup_version());
 		return 0;
 	} else if(strcmp(argv[1], "stop") == 0) {
+#ifndef TUP_NO_MONITOR
 		return stop_monitor();
+#else
+		fprintf(stderr, "Error: not compiled with monitor support.\n");
+		return -1;
+#endif
 	}
 
 	if(init_getexecwd(argv[0]) < 0) {
@@ -89,6 +94,7 @@ int main(int argc, char **argv)
 	} else if(strcmp(cmd, "g") == 0) {
 		rc = graph(argc, argv);
 	} else if(strcmp(cmd, "scan") == 0) {
+#ifndef TUP_NO_MONITOR
 		int pid;
 		pid = monitor_get_pid();
 		if(pid > 0) {
@@ -96,6 +102,10 @@ int main(int argc, char **argv)
 			return -1;
 		}
 		rc = tup_scan();
+#else
+		fprintf(stderr, "Error: not compiled with monitor support.\n");
+        rc = -1;
+#endif
 	} else if(strcmp(cmd, "link") == 0) {
 		rc = mlink(argc, argv);
 	} else if(strcmp(cmd, "read") == 0) {
@@ -114,8 +124,10 @@ int main(int argc, char **argv)
 		rc = tup_db_check_flags(TUP_FLAGS_CREATE | TUP_FLAGS_MODIFY);
 	} else if(strcmp(cmd, "create_flags_exists") == 0) {
 		rc = tup_db_check_flags(TUP_FLAGS_CREATE);
+#ifndef TUP_NO_TOUCH
 	} else if(strcmp(cmd, "touch") == 0) {
 		rc = touch(argc, argv);
+#endif
 	} else if(strcmp(cmd, "node") == 0) {
 		rc = node(argc, argv);
 	} else if(strcmp(cmd, "rm") == 0) {
@@ -509,6 +521,7 @@ static int link_exists(int argc, char **argv)
 	return tup_db_link_exists(tenta->tnode.tupid, tentb->tnode.tupid);
 }
 
+#ifndef TUP_NO_TOUCH
 static int touch(int argc, char **argv)
 {
 	int x;
@@ -614,6 +627,7 @@ static int touch(int argc, char **argv)
 		return -1;
 	return 0;
 }
+#endif
 
 static int node(int argc, char **argv)
 {
